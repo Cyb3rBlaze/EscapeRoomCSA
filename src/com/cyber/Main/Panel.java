@@ -38,7 +38,7 @@ public class Panel extends JPanel implements Runnable, KeyListener {
 		displayFPS = 0;
 		
 		//Initializing game setting
-		enviornment = new SettingContainer(4000, 800);
+		enviornment = new SettingContainer(3000, 800);
 		
 		//Beginning game loop
 		thread.start();

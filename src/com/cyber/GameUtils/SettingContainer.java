@@ -5,6 +5,7 @@ import java.awt.event.KeyEvent;
 import java.awt.geom.Rectangle2D;
 import java.io.File;
 import java.io.IOException;
+import java.net.URISyntaxException;
 
 import javax.imageio.ImageIO;
 
@@ -33,19 +34,21 @@ public class SettingContainer {
 			this.fieldWidth = fieldWidth;
 			this.fieldHeight = fieldHeight;
 			
-			controller = new Player(500, 200, 200, 200, ImageIO.read(new File("res/playerSpriteSheet.png")), true);
+			controller = new Player(300, 8, 200, 200, ImageIO.read(new File("res/playerSpriteSheet.png")), true);
 			
 			//Initializing setting
-			int[] field = {2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2,
-					2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2,
-					2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2,
-					2, 0, 0, 0, 0, 0, 0, 1, 0, 1, 1, 1, 0, 1, 2, 0, 0, 0, 1, 1, 1, 0, 0, 1, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2,
-					2, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2,
-					2, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2,
-					2, 1, 1, 2, 1, 1, 1, 0, 0, 1, 1, 1, 0, 0, 1, 1, 0, 1, 1, 1, 1, 0, 0, 1, 1, 1, 0, 1, 1, 0, 0, 1, 1, 1, 0, 0, 1, 1, 1, 2,
-					2, 2, 2, 2, 2, 2, 2, 0, 0, 2, 2, 2, 0, 0, 2, 2, 0, 2, 2, 2, 2, 0, 0, 2, 2, 2, 0, 2, 2, 0, 0, 2, 2, 2, 0, 0, 2, 2, 2, 2};
+			int[] field = {
+					2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,
+					2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,0,0,0,0,0,0,1,1,0,0,0,0,0,1,0,0,2,
+					2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,1,2,0,0,2,
+					2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,0,0,0,0,0,0,0,1,1,1,0,0,0,2,2,0,0,0,0,0,1,1,2,2,0,0,2,
+					2,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,2,0,0,0,0,0,1,1,2,2,2,0,0,2,2,2,2,2,0,0,0,0,0,0,0,0,0,2,
+					2,0,0,0,0,0,1,1,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,
+					2,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+					2,2,2,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,2,2,0,0,0,1,2,2,2,2,1,1,0,0,0,0,1,1,0,1,0,1,0,1,0,0,1
+			};
 			
-			setting = new Setting(field, ImageIO.read(new File("res/setting.png")), fieldWidth, fieldHeight, 40, 8, 1);
+			setting = new Setting(field, ImageIO.read(new File("res/setting.png")), fieldWidth, fieldHeight, 47, 8, 1);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -58,7 +61,7 @@ public class SettingContainer {
 	/***************************************************************************/
 	
 	//Updates Setting properties every frame
-	public void render() {
+	public void render() throws IOException, URISyntaxException {
 		//Rendering setting properties
 		setting.render();
 		
@@ -82,14 +85,14 @@ public class SettingContainer {
 		
 		if(controller.borders[3].intersects(left)) {
 			if(setting.getParentX() < 0) {
-				controller.setX(controller.getX()+2);
-				setting.setParentX(setting.getParentX()+2);
+				controller.setX(controller.getX()+3);
+				setting.setParentX(setting.getParentX()+3);
 			}
 		}
 		else if(controller.borders[1].intersects(right)) {
 			if(setting.getParentX() > -fieldWidth+1000) {
-				controller.setX(controller.getX()-2);
-				setting.setParentX(setting.getParentX()-2);
+				controller.setX(controller.getX()-3);
+				setting.setParentX(setting.getParentX()-3);
 			}
 		}
 		
@@ -99,17 +102,18 @@ public class SettingContainer {
 				controller.setStopped(false);
 			}
 			if(controller.borders()[1].intersects(setting.getFieldColliders()[i])) {
-				controller.setX(controller.getX()-2);
+				controller.setX(controller.getX()-3);
 			}
 			if(controller.borders()[2].intersects(setting.getFieldColliders()[i])) {
 				controller.setVelY(0);
 				controller.setJumped(false);
+				controller.setDoubleJumped(false);
 				if(controller.getStopped()) {
 					controller.setCurrMove(1);
 				}
 			}
 			if(controller.borders()[3].intersects(setting.getFieldColliders()[i])) {
-				controller.setX(controller.getX()+2);
+				controller.setX(controller.getX()+3);
 			}
 		}
 	}

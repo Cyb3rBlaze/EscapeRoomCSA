@@ -8,6 +8,8 @@ import java.awt.event.KeyListener;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.net.URISyntaxException;
 
 import javax.swing.JPanel;
 
@@ -38,7 +40,7 @@ public class Panel extends JPanel implements Runnable, KeyListener {
 		displayFPS = 0;
 		
 		//Initializing game setting
-		enviornment = new SettingContainer(4000, 800);
+		enviornment = new SettingContainer(4700, 800);
 		
 		//Beginning game loop
 		thread.start();
@@ -64,15 +66,20 @@ public class Panel extends JPanel implements Runnable, KeyListener {
 			
 			//Prints current FPS every second
 			if(System.currentTimeMillis() - lastTime >= 1000) {
-				System.out.println(currFPS);
 				displayFPS = currFPS;
 				lastTime = System.currentTimeMillis();
 				currFPS = 0;
 			}
 			
 			//Method used to control graphics rendering
-			render();
-			
+			try {
+				render();
+			} catch (IOException e) {
+				e.printStackTrace();
+			} catch (URISyntaxException e) {
+				e.printStackTrace();
+			}
+
 			//Controls frame rate
 			try {
 				thread.sleep(1000 / targetFPS);
@@ -84,7 +91,7 @@ public class Panel extends JPanel implements Runnable, KeyListener {
 	
 	
 	//Controls individual object rendering and paints to the screen every frame
-	public void render() {
+	public void render() throws IOException, URISyntaxException {
 		//Rendering setting
 		enviornment.render();
 		

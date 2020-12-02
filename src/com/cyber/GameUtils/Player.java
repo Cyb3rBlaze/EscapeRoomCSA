@@ -5,6 +5,8 @@ import java.awt.event.KeyEvent;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.Timer;
 
 public class Player extends GameObject {
@@ -12,8 +14,10 @@ public class Player extends GameObject {
 	private double velX;
 	private double velY;
 	private boolean jumped = false;
+	private boolean doubleJump = false;
 	private boolean stopped = false;
 	private boolean left = false;
+	public boolean isDead = false;
 	
 	public boolean GAenabled = false;
 	
@@ -55,15 +59,49 @@ public class Player extends GameObject {
 	/***************************************************************************/
 	
 	//Updates Player properties every frame
-	public void render() {
+	public void render() throws IOException, URISyntaxException {
+		// While isDead, open up GUI for Trivia Question and stop program
+		if(isDead) {
+			DeathScreen dscreen = new DeathScreen();
+
+			//the clock keeps the program running
+			int clock = 0;
+			int MAX_CLOCK = 100;
+			while (isDead) {
+				if(dscreen.isCorrect != null) {
+					if (!dscreen.isCorrect) {
+						System.out.println("You Lose!");
+						YCWOpener.open(dscreen.question.reference);
+						System.exit(5579426);
+					}
+					else {
+						this.setY(200);
+						isDead = false;
+					}
+				}
+				clock++;
+				if(clock >= MAX_CLOCK){clock = 0;}
+			}
+			dscreen.closeWindow();
+			dscreen = null;
+		}
 		this.setX(this.getX()+velX);
 		this.setY(this.getY()+velY);
 		actualX = this.getX()+65;
 		actualY = this.getY()+80;
 		if(velY <= 4) {
-			velY += 0.1;
+			velY += 0.2;
 		}
 		initializeColliders();
+		if(actualY > 800) {
+			isDead = true;
+		}
+		//Win Indication
+		if(this.getX() > 900){
+			System.out.println("You WIN!!!");
+			YCWOpener.open(null);
+			System.exit(5579426);
+		}
 	}
 	
 	//Updates Player graphics every frame
@@ -90,6 +128,10 @@ public class Player extends GameObject {
 	
 	public void setJumped(boolean jumped) {
 		this.jumped = jumped;
+	}
+	
+	public void setDoubleJumped(boolean jumped) {
+		this.doubleJump = jumped;
 	}
 	
 	public void setStopped(boolean stopped) {
@@ -171,7 +213,7 @@ public class Player extends GameObject {
 	
 	//Genetic algorithm functions
 	public void right() {
-		velX = 2;
+		velX = 3;
 		if(jumped == false) {
 			currMove = 1;
 			setStopped(true);
@@ -180,7 +222,7 @@ public class Player extends GameObject {
 	}
 	
 	public void left() {
-		velX = -2;
+		velX = -3;
 		if(jumped == false) {
 			currMove = 1;
 			setStopped(true);
@@ -190,9 +232,16 @@ public class Player extends GameObject {
 	
 	public void jump() {
 		if(!jumped) {
-			velY = -6;
-			jumped = true;
-			currMove = 0;
+			if(!doubleJump) {
+				velY = -6;
+				doubleJump = true;
+				currMove = 0;
+			}
+			else {
+				velY = -6;
+				jumped = true;
+				currMove = 0;
+			}
 		}
 	}
 }
